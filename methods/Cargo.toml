@@ -1,0 +1,13 @@
+[package]
+name = "methods"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+nfc-core = { path = "../core"}
+
+[build-dependencies]
+risc0-build = { version = "0.14.0" }
+
+[package.metadata.risc0]
+methods = ["guest"]
