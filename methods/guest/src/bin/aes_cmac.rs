@@ -1,6 +1,4 @@
 #![no_main]
-// If you want to try std support, also update the guest Cargo.toml file
-// #![no_std]  // std support is experimental
 
 use risc0_zkvm::guest::env;
 use nfc_core::{Inputs, Outputs, build_sv2_message, mac_message};
@@ -19,8 +17,6 @@ static KEYS: &'static [[u8; 16]] = &[
 ];
 
 pub fn main() {
-    // let key: [u8; 16] = [0x00; 16];
-
     let inputs: Inputs = env::read();
     let id_index = UIDS.iter().position(|&u| u == inputs.uid).unwrap();
     let key = *KEYS.get(id_index).unwrap();
@@ -29,7 +25,16 @@ pub fn main() {
     let macd_sv2 = mac_message(key, sv2.to_vec());
 
     let full_sun = mac_message(macd_sv2, Vec::new());
-    let truncated_sun: [u8; 8] = [full_sun[1], full_sun[3], full_sun[5], full_sun[7], full_sun[9], full_sun[11], full_sun[13], full_sun[15]];
+    let truncated_sun: [u8; 8] = [
+        full_sun[1],
+        full_sun[3],
+        full_sun[5],
+        full_sun[7],
+        full_sun[9],
+        full_sun[11],
+        full_sun[13],
+        full_sun[15],
+    ];
 
     if truncated_sun != inputs.sun {
         panic!();
